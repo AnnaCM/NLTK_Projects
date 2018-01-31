@@ -5,8 +5,6 @@ from nltk.corpus import stopwords
 import pickle, scipy
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.naive_bayes import MultinomialNB,BernoulliNB
-from sklearn.linear_model import LogisticRegression,SGDClassifier
-from sklearn.svm import SVC, LinearSVC, NuSVC
 
 import random, io, glob
 
@@ -60,52 +58,22 @@ pickle.dump(featuresets, save_featuresets)
 save_featuresets.close()
 
 random.shuffle(featuresets)
-training_set = featuresets[:13500] #40% of featuresets
-testing_set = featuresets[13500:] #60% of featuresets
+training_set = featuresets[:27000] #80% of featuresets
+testing_set = featuresets[27000:] #20% of featuresets
 
 classifier = nltk.NaiveBayesClassifier.train(training_set)
 save_classifier = open("pickled_files/naivebayes.pickle","wb")
 pickle.dump(classifier, save_classifier)
 save_classifier.close()
 
-MNB_classifier = SklearnClassifier(MultinomialNB())
-MNB_classifier.train(training_set)
-save_classifier = open("pickled_files/MNB_classifier.pickle","wb")
-pickle.dump(MNB_classifier, save_classifier)
+MultinomialNB_classifier = SklearnClassifier(MultinomialNB())
+MultinomialNB_classifier.train(training_set)
+save_classifier = open("pickled_files/MultinomialNB_classifier.pickle","wb")
+pickle.dump(MultinomialNB_classifier, save_classifier)
 save_classifier.close()
 
 BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
 BernoulliNB_classifier.train(training_set)
 save_classifier = open("pickled_files/BernoulliNB_classifier.pickle","wb")
 pickle.dump(BernoulliNB_classifier, save_classifier)
-save_classifier.close()
-
-LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
-LogisticRegression_classifier.train(training_set)
-save_classifier = open("pickled_files/LogisticRegression_classifier.pickle","wb")
-pickle.dump(LogisticRegression_classifier, save_classifier)
-save_classifier.close()
-
-SGDClassifier_classifier = SklearnClassifier(SGDClassifier())
-SGDClassifier_classifier.train(training_set)
-save_classifier = open("pickled_files/SGDClassifier_classifier.pickle","wb")
-pickle.dump(SGDClassifier_classifier, save_classifier)
-save_classifier.close()
-
-SVC_classifier = SklearnClassifier(SVC())
-SVC_classifier.train(training_set)
-save_classifier = open("pickled_files/SVC_classifier.pickle","wb")
-pickle.dump(SVC_classifier, save_classifier)
-save_classifier.close()
-
-LinearSVC_classifier = SklearnClassifier(LinearSVC())
-LinearSVC_classifier.train(training_set)
-save_classifier = open("pickled_files/LinearSVC_classifier.pickle","wb")
-pickle.dump(LinearSVC_classifier, save_classifier)
-save_classifier.close()
-
-NuSVC_classifier = SklearnClassifier(NuSVC())
-NuSVC_classifier.train(training_set)
-save_classifier = open("pickled_files/NuSVC_classifier.pickle","wb")
-pickle.dump(NuSVC_classifier, save_classifier)
 save_classifier.close()
