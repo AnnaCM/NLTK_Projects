@@ -5,10 +5,8 @@ from nltk.corpus import stopwords
 import pickle
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.naive_bayes import MultinomialNB,BernoulliNB
-from sklearn.linear_model import LogisticRegression,SGDClassifier
-from sklearn.svm import SVC, LinearSVC, NuSVC
-import random
-import io, glob
+
+import random, io, glob
 
 all_emails = []
 for f in glob.glob("Enron-Spam\*\ham\*.txt"):
@@ -48,38 +46,23 @@ def feat(emails):
 featuresets = [(feat(email),category) for (email,category) in all_emails]
 random.shuffle(featuresets)
 
-training_set = featuresets[:13500] #40% of featuresets
-testing_set = featuresets[13500:] #60% of featuresets
+training_set = featuresets[:27000] #80% of featuresets
+testing_set = featuresets[27000:] #20% of featuresets
 
 classifier = nltk.NaiveBayesClassifier.train(training_set)
 
 print "Original Naive Bayes Algo accuracy percent:", (nltk.classify.accuracy(classifier, testing_set))*100
 classifier.show_most_informative_features(15)
 
-MNB_classifier = SklearnClassifier(MultinomialNB())
-MNB_classifier.train(training_set)
-print "MNB_classifier accuracy percent:", (nltk.classify.accuracy(MNB_classifier, testing_set))*100
+MultinomialNB_classifier = SklearnClassifier(MultinomialNB())
+MultinomialNB_classifier.train(training_set)
+print "MultinomialNB_classifier accuracy percent:", (nltk.classify.accuracy(MultinomialNB_classifier, testing_set))*100
 
 BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
 BernoulliNB_classifier.train(training_set)
 print "BernoulliNB_classifier accuracy percent:", (nltk.classify.accuracy(BernoulliNB_classifier, testing_set))*100
 
-LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
-LogisticRegression_classifier.train(training_set)
-print "LogisticRegression_classifier accuracy percent:", (nltk.classify.accuracy(LogisticRegression_classifier,testing_set))*100
+email = raw_input("Enter the email you'd like to classify: \n>>")
 
-SGDClassifier_classifier = SklearnClassifier(SGDClassifier())
-SGDClassifier_classifier.train(training_set)
-print "SGDClassifier_classifier accuracy percent:", (nltk.classify.accuracy(SGDClassifier_classifier, testing_set))*100
-
-SVC_classifier = SklearnClassifier(SVC())
-SVC_classifier.train(training_set)
-print "SVC_classifier accuracy percent:", (nltk.classify.accuracy(SVC_classifier, testing_set))*100
-
-LinearSVC_classifier = SklearnClassifier(LinearSVC())
-LinearSVC_classifier.train(training_set)
-print "LinearSVC_classifier accuracy percent:", (nltk.classify.accuracy(LinearSVC_classifier, testing_set))*100
-
-NuSVC_classifier = SklearnClassifier(NuSVC())
-NuSVC_classifier.train(training_set)
-print "NuSVC_classifier accuracy percent:", (nltk.classify.accuracy(NuSVC_classifier, testing_set))*100
+import classification_method as c
+print(c.classification(email))
